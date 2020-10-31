@@ -1,12 +1,11 @@
 import Head from "next/head";
 import { getCharacters } from "../api/index";
-export async function getStaticProps() {
-  // Call an external API endpoint to get posts.
-  // You can use any data fetching library
-  const characters = await getCharacters();
+import { useSelector, useDispatch } from "react-redux";
+import { addCharacter } from "../store/characters/action";
 
-  // By returning { props: posts }, the Blog component
-  // will receive `posts` as a prop at build time
+export async function getStaticProps() {
+  // const characters = await getCharacters();
+  const characters = "teste";
   return {
     props: {
       characters,
@@ -16,6 +15,22 @@ export async function getStaticProps() {
 
 export default function Home({ characters }) {
   console.log(characters, "characters");
+  const globalState = useSelector((state) => state.coomic);
+  const dispatch = useDispatch();
+  console.log(globalState);
+  if (globalState) {
+    // dispatch(
+    //   addCharacter(
+    //     43434,
+    //     "vini",
+    //     "f",
+    //     "vinicius",
+    //     "dbage 02",
+    //     "18/04/1996",
+    //     false
+    //   )
+    // );
+  }
   return (
     <div className="container">
       <Head>
