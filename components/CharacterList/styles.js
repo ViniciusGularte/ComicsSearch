@@ -10,7 +10,6 @@ const Container = styled.div`
 `;
 
 const CharacterCard = styled.div`
-  cursor: pointer;
   border-radius: 40px;
   border: 3px solid #eee;
   box-shadow: 0px 0px 22px 0px rgba(148, 148, 148, 0.51);
@@ -22,7 +21,7 @@ const CharacterCard = styled.div`
   height: 400px;
   overflow-y: auto;
   &:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
   @media screen and (min-width: 40em) {
     max-width: calc(50% - 1rem);
@@ -41,5 +40,48 @@ const BannerImage = styled.div`
   justify-content: center;
   align-items: center;
 `;
+const CharacterCardTextContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 125px;
+`;
+const CardTextName = styled.span`
+  text-align: center;
+  color: #7c7c7d;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 8px;
+  flex: 1;
+`;
 
-export { Container, CharacterCard, BannerImage };
+const CardTextFooter = styled.a`
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  color: #3378b5;
+  align-self: auto;
+  text-align: center;
+  flex: 1;
+`;
+const LoadingItem = styled.div`
+  display: flex;
+  flex: 1;
+  margin: 16px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 18px;
+  color: #3378b5;
+`;
+
+export {
+  Container,
+  CharacterCard,
+  BannerImage,
+  CardTextName,
+  CardTextFooter,
+  CharacterCardTextContent,
+  LoadingItem,
+};

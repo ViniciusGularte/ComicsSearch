@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
-import { Container, CharacterCard, BannerImage } from "./styles";
+import {
+  Container,
+  CharacterCard,
+  BannerImage,
+  CharacterCardTextContent,
+  CardTextName,
+  CardTextFooter,
+  LoadingItem,
+} from "./styles";
+import StarIcon from "../../assets/starIcon";
 const CharacterList = ({ Itens }) => {
   const [characters, setCharacters] = useState({
     results: [],
@@ -63,7 +72,6 @@ const CharacterList = ({ Itens }) => {
       }
     }
   };
-  console.log(characters.results);
   return (
     <>
       <Container className="characters-list">
@@ -75,12 +83,17 @@ const CharacterList = ({ Itens }) => {
               <CharacterCard className="characters" key={i}>
                 <BannerImage background={character.image.medium_url} />
 
-                <span>{character.name}</span>
+                <CharacterCardTextContent>
+                  <CardTextName>
+                    {character.name} <hr />
+                  </CardTextName>
+                  <CardTextFooter href="#">Ver mais</CardTextFooter>
+                </CharacterCardTextContent>
               </CharacterCard>
             );
           })}
       </Container>
-      {loading && <h1>Loading ...</h1>}
+      {loading && <LoadingItem> Carregando ... </LoadingItem>}
     </>
   );
 };
