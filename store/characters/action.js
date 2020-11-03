@@ -7,6 +7,7 @@ export const addCharacter = (
   characterRealName,
   characterAliase,
   characterBirth,
+  characterImage,
   isFavorite
 ) => async (dispatch) => {
   return dispatch({
@@ -18,6 +19,7 @@ export const addCharacter = (
       characterRealName,
       characterAliase,
       characterBirth,
+      characterImage,
       isFavorite,
     },
   });

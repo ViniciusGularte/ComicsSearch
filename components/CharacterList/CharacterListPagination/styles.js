@@ -3,7 +3,6 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
@@ -47,21 +46,23 @@ const CharacterCardTextContent = styled.div`
 `;
 const CardTextName = styled.span`
   text-align: center;
-  color: #7c7c7d;
+  color: ${(props) => props.theme.secondary};
   font-size: 18px;
   font-weight: bold;
   margin-top: 8px;
   flex: 1;
 `;
 
-const CardTextFooter = styled.a`
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 16px;
-  color: #3378b5;
+const CardTextFooter = styled.div`
   align-self: auto;
   text-align: center;
   flex: 1;
+  a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    color: ${(props) => props.theme.primary};
+  }
 `;
 const LoadingItem = styled.div`
   display: flex;
@@ -73,12 +74,13 @@ const LoadingItem = styled.div`
   flex-direction: row;
   justify-content: space-between;
   font-size: 18px;
-  color: #3378b5;
+  color: ${(props) => props.theme.primary};
 `;
-
+const ContainerSearchView = styled.div``;
 export {
   Container,
   CharacterCard,
+  ContainerSearchView,
   BannerImage,
   CardTextName,
   CardTextFooter,

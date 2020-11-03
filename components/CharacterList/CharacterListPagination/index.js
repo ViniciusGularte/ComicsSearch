@@ -8,32 +8,63 @@ import {
   CardTextName,
   CardTextFooter,
   LoadingItem,
+  ContainerSearchView,
 } from "./styles";
-import StarIcon from "../../assets/starIcon";
-const CharacterList = ({ Itens }) => {
+import Link from "next/link";
+import { useSelector, useDispatch } from "react-redux";
+
+const CharacterList = ({ Itens, is_search, only_favorite }) => {
   const [characters, setCharacters] = useState({
     results: [],
   });
 
+  const [viewSearchResults, setViewSearchResults] = useState(false);
   const [loading, setLoading] = useState(false);
   const setLoadingTrue = () => setLoading(true);
   const setLoadingFalse = () => setLoading(false);
-
   const router = useRouter();
+  const stateCharacters = useSelector((state) => state.characters);
+  // dispatch(
+  //   addCharacter(
+  //     43434,
+  //     "vini",
+  //     "f",
+  //     "vinicius",
+  //     "dbage 02",
+  //     "18/04/1996",
+  //     false
+  //   )
+  // );
+
   useEffect(() => {
     if (Itens) {
-      if (Itens.error !== "OK") {
+      if (only_favorite) {
+        console.log(stateCharacters);
+      } else if (Itens.error !== "OK") {
         // Handle error
       } else {
-        setCharacters({
-          ...characters,
-          results: [...characters.results, ...Itens.results],
-          offset: Itens.offset,
-          number_of_total_results: Itens.number_of_total_results,
-        });
+        if (is_search) {
+          setViewSearchResults(true);
+          setCharacters({
+            results: Itens.results,
+            offset: Itens.offset,
+            number_of_total_results: Itens.number_of_total_results,
+          });
+        } else {
+          setCharacters({
+            ...characters,
+            results: viewSearchResults
+              ? Itens.results
+              : [...characters.results, ...Itens.results],
+            offset: Itens.offset,
+            number_of_total_results: Itens.number_of_total_results,
+          });
+          setViewSearchResults(false);
+        }
       }
     }
   }, [Itens]);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -74,6 +105,13 @@ const CharacterList = ({ Itens }) => {
   };
   return (
     <>
+      {viewSearchResults && is_search && (
+        <ContainerSearchView>
+          {" "}
+          Encontrados {characters.results.length} personagens{" "}
+        </ContainerSearchView>
+      )}
+
       <Container className="characters-list">
         {characters &&
           characters.results &&
@@ -82,18 +120,23 @@ const CharacterList = ({ Itens }) => {
             return (
               <CharacterCard className="characters" key={i}>
                 <BannerImage background={character.image.medium_url} />
-
                 <CharacterCardTextContent>
                   <CardTextName>
                     {character.name} <hr />
                   </CardTextName>
-                  <CardTextFooter href="#">Ver mais</CardTextFooter>
+                  <CardTextFooter>
+                    <Link
+                      href={`/character/${encodeURIComponent(character.id)}`}
+                    >
+                      Ver mais
+                    </Link>
+                  </CardTextFooter>
                 </CharacterCardTextContent>
               </CharacterCard>
             );
           })}
       </Container>
-      {loading && <LoadingItem> Carregando ... </LoadingItem>}
+      {loading && !is_search && <LoadingItem> Carregando ... </LoadingItem>}
     </>
   );
 };
