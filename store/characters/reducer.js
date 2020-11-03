@@ -21,6 +21,7 @@ export default function reducer(state = initialState, action) {
       return {
         [characterId]: {
           ...character,
+          id: characterId,
           name: characterName,
           gender: characterGender,
           real_name: characterRealName,

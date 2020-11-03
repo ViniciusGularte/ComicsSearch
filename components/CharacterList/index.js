@@ -8,32 +8,44 @@ import {
   CardTextName,
   CardTextFooter,
   LoadingItem,
+  ContainerSearchView,
 } from "./styles";
-import StarIcon from "../../assets/starIcon";
-const CharacterList = ({ Itens }) => {
+import Link from "next/link";
+
+const CharacterList = ({ Itens, is_search }) => {
   const [characters, setCharacters] = useState({
     results: [],
   });
-
+  const [viewSearchResults, setViewSearchResults] = useState(false);
   const [loading, setLoading] = useState(false);
   const setLoadingTrue = () => setLoading(true);
   const setLoadingFalse = () => setLoading(false);
-
   const router = useRouter();
   useEffect(() => {
     if (Itens) {
       if (Itens.error !== "OK") {
         // Handle error
       } else {
-        setCharacters({
-          ...characters,
-          results: [...characters.results, ...Itens.results],
-          offset: Itens.offset,
-          number_of_total_results: Itens.number_of_total_results,
-        });
+        if (is_search) {
+          setViewSearchResults(true);
+          setCharacters({
+            results: Itens.results,
+            offset: Itens.offset,
+            number_of_total_results: Itens.number_of_total_results,
+          });
+        } else {
+          setViewSearchResults(false);
+          setCharacters({
+            ...characters,
+            results: [...characters.results, ...Itens.results],
+            offset: Itens.offset,
+            number_of_total_results: Itens.number_of_total_results,
+          });
+        }
       }
     }
   }, [Itens]);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -74,6 +86,13 @@ const CharacterList = ({ Itens }) => {
   };
   return (
     <>
+      {viewSearchResults && is_search && (
+        <ContainerSearchView>
+          {" "}
+          Encontrados {characters.results.length} personagens{" "}
+        </ContainerSearchView>
+      )}
+
       <Container className="characters-list">
         {characters &&
           characters.results &&
@@ -82,18 +101,23 @@ const CharacterList = ({ Itens }) => {
             return (
               <CharacterCard className="characters" key={i}>
                 <BannerImage background={character.image.medium_url} />
-
                 <CharacterCardTextContent>
                   <CardTextName>
                     {character.name} <hr />
                   </CardTextName>
-                  <CardTextFooter href="#">Ver mais</CardTextFooter>
+                  <CardTextFooter>
+                    <Link
+                      href={`/character/${encodeURIComponent(character.id)}`}
+                    >
+                      Ver mais
+                    </Link>
+                  </CardTextFooter>
                 </CharacterCardTextContent>
               </CharacterCard>
             );
           })}
       </Container>
-      {loading && <LoadingItem> Carregando ... </LoadingItem>}
+      {loading && !is_search && <LoadingItem> Carregando ... </LoadingItem>}
     </>
   );
 };
