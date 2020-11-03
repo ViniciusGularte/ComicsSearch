@@ -7,7 +7,7 @@ import {
   InputCheckboxSlider,
 } from "./styles";
 import { useRouter } from "next/router";
-import customUseEffectUpdate from "../../hooks/customUseEffect";
+import customUseEffectUpdate from "../../../hooks/customUseEffect";
 const CharacterGroupAction = () => {
   const router = useRouter();
   const [onlyFavorites, setOnlyFavorites] = useState(false);

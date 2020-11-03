@@ -3,7 +3,7 @@ import { Container, Input, InputContainer } from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
-import customUseEffectUpdate from "../../hooks/customUseEffect";
+import customUseEffectUpdate from "../../../hooks/customUseEffect";
 
 const SearchBar = () => {
   const router = useRouter();

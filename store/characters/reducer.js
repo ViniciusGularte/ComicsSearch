@@ -15,6 +15,7 @@ export default function reducer(state = initialState, action) {
         characterRealName,
         characterAliase,
         characterBirth,
+        characterImage,
         isFavorite,
       } = payload;
       const character = state[characterId];
@@ -27,6 +28,7 @@ export default function reducer(state = initialState, action) {
           real_name: characterRealName,
           aliases: characterAliase,
           birth: characterBirth,
+          image: characterImage,
           is_favorite: isFavorite,
         },
       };

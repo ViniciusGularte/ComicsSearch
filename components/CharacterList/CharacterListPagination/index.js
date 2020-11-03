@@ -11,19 +11,36 @@ import {
   ContainerSearchView,
 } from "./styles";
 import Link from "next/link";
+import { useSelector, useDispatch } from "react-redux";
 
-const CharacterList = ({ Itens, is_search }) => {
+const CharacterList = ({ Itens, is_search, only_favorite }) => {
   const [characters, setCharacters] = useState({
     results: [],
   });
+
   const [viewSearchResults, setViewSearchResults] = useState(false);
   const [loading, setLoading] = useState(false);
   const setLoadingTrue = () => setLoading(true);
   const setLoadingFalse = () => setLoading(false);
   const router = useRouter();
+  const stateCharacters = useSelector((state) => state.characters);
+  // dispatch(
+  //   addCharacter(
+  //     43434,
+  //     "vini",
+  //     "f",
+  //     "vinicius",
+  //     "dbage 02",
+  //     "18/04/1996",
+  //     false
+  //   )
+  // );
+
   useEffect(() => {
     if (Itens) {
-      if (Itens.error !== "OK") {
+      if (only_favorite) {
+        console.log(stateCharacters);
+      } else if (Itens.error !== "OK") {
         // Handle error
       } else {
         if (is_search) {
@@ -34,13 +51,15 @@ const CharacterList = ({ Itens, is_search }) => {
             number_of_total_results: Itens.number_of_total_results,
           });
         } else {
-          setViewSearchResults(false);
           setCharacters({
             ...characters,
-            results: [...characters.results, ...Itens.results],
+            results: viewSearchResults
+              ? Itens.results
+              : [...characters.results, ...Itens.results],
             offset: Itens.offset,
             number_of_total_results: Itens.number_of_total_results,
           });
+          setViewSearchResults(false);
         }
       }
     }

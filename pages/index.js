@@ -1,20 +1,18 @@
 import { getCharacters, getCharactersSearch } from "../api/index";
-import { useSelector, useDispatch } from "react-redux";
-import CharacterList from "../components/CharacterList";
-import CharacterSearch from "../components/CharacterSearch";
-import CharacterGroupAction from "../components/CharacterGroupActions";
-import { addCharacter } from "../store/characters/action";
+import CharacterList from "../components/CharacterList/CharacterListPagination";
+import CharacterSearch from "../components/CharacterList/CharacterSearch";
+import CharacterGroupAction from "../components/CharacterList/CharacterGroupActions";
 import { Container } from "../assets/globalStyles/styles";
 export async function getServerSideProps({ query }) {
   const offset = query.offset || 0;
-
   const search = query.search || "";
   const favorite = query.favorite || false;
   if (favorite === "true") {
     return {
       props: {
-        is_search: true,
+        is_search: false,
         only_favorite: true,
+        characters: [],
       },
     };
   } else if (search) {
@@ -36,31 +34,16 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-const Home = ({ characters, is_search }) => {
-  const globalState = useSelector((state) => state.characters);
-  const stateCharacters = useSelector((state) => state.characters);
-
-  const dispatch = useDispatch();
-
-  console.log(globalState);
-  if (globalState) {
-    // dispatch(
-    //   addCharacter(
-    //     43434,
-    //     "vini",
-    //     "f",
-    //     "vinicius",
-    //     "dbage 02",
-    //     "18/04/1996",
-    //     false
-    //   )
-    // );
-  }
+const Home = ({ characters, is_search, only_favorite }) => {
   return (
     <Container>
       <CharacterSearch />
       <CharacterGroupAction />
-      <CharacterList is_search={is_search} Itens={characters} />
+      <CharacterList
+        only_favorite={only_favorite}
+        is_search={is_search}
+        Itens={characters}
+      />
     </Container>
   );
 };
