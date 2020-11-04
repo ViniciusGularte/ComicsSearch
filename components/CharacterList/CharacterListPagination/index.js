@@ -11,7 +11,7 @@ import {
   ContainerSearchView,
 } from "./styles";
 import Link from "next/link";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const CharacterList = ({ Itens, is_search, only_favorite }) => {
   const [characters, setCharacters] = useState({
@@ -24,22 +24,17 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
   const setLoadingFalse = () => setLoading(false);
   const router = useRouter();
   const stateCharacters = useSelector((state) => state.characters);
-  // dispatch(
-  //   addCharacter(
-  //     43434,
-  //     "vini",
-  //     "f",
-  //     "vinicius",
-  //     "dbage 02",
-  //     "18/04/1996",
-  //     false
-  //   )
-  // );
-
   useEffect(() => {
     if (Itens) {
       if (only_favorite) {
-        console.log(stateCharacters);
+        const array_characters_store = Object.values(stateCharacters);
+        const array_characters_favorite = array_characters_store.filter(
+          (character) => character.is_favorite
+        );
+        setViewSearchResults(true);
+        setCharacters({
+          results: array_characters_favorite,
+        });
       } else if (Itens.error !== "OK") {
         // Handle error
       } else {
@@ -119,16 +114,24 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
           characters.results.map((character, i) => {
             return (
               <CharacterCard className="characters" key={i}>
-                <BannerImage background={character.image.medium_url} />
+                <BannerImage
+                  background={
+                    only_favorite ? character.image : character.image.medium_url
+                  }
+                />
                 <CharacterCardTextContent>
                   <CardTextName>
-                    {character.name} <hr />
+                    {stateCharacters[character.id] &&
+                    stateCharacters[character.id].name
+                      ? stateCharacters[character.id].name
+                      : character.name}{" "}
+                    <hr />
                   </CardTextName>
                   <CardTextFooter>
                     <Link
                       href={`/character/${encodeURIComponent(character.id)}`}
                     >
-                      Ver mais
+                      See More
                     </Link>
                   </CardTextFooter>
                 </CharacterCardTextContent>
@@ -136,7 +139,9 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
             );
           })}
       </Container>
-      {loading && !is_search && <LoadingItem> Carregando ... </LoadingItem>}
+      {loading && !is_search && !only_favorite && (
+        <LoadingItem> Loading ... </LoadingItem>
+      )}
     </>
   );
 };

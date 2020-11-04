@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   ContainerCheckbox,
   LabelCheckbox,
   InputCheckbox,
   InputCheckboxSlider,
+  LoadingText,
 } from "./styles";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import customUseEffectUpdate from "../../../hooks/customUseEffect";
 const CharacterGroupAction = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const setLoadingTrue = () => setLoading(true);
+  const setLoadingFalse = () => setLoading(false);
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const toogleFavorites = () => {
     setOnlyFavorites(!onlyFavorites);
@@ -22,15 +26,28 @@ const CharacterGroupAction = () => {
       query: query,
     });
   }, [onlyFavorites]);
-
+  useEffect(() => {
+    Router.events.on("routeChangeStart", setLoadingTrue);
+    Router.events.on("routeChangeComplete", setLoadingFalse);
+    return () => {
+      Router.events.off("routeChangeStart", setLoadingTrue);
+      Router.events.off("routeChangeComplete", setLoadingFalse);
+    };
+  }, []);
   return (
     <Container>
-      <LabelCheckbox>Mostrar apenas favoritos: </LabelCheckbox>
+      <Container>
+        <LabelCheckbox>Only My Favorites: </LabelCheckbox>
 
-      <ContainerCheckbox>
-        <InputCheckbox type="checkbox" checked={onlyFavorites} />
-        <InputCheckboxSlider onClick={toogleFavorites} active={onlyFavorites} />
-      </ContainerCheckbox>
+        <ContainerCheckbox>
+          <InputCheckbox type="checkbox" checked={onlyFavorites} />
+          <InputCheckboxSlider
+            onClick={toogleFavorites}
+            active={onlyFavorites}
+          />
+        </ContainerCheckbox>
+      </Container>
+      {loading ? <LoadingText>Loading ...</LoadingText> : null}
     </Container>
   );
 };

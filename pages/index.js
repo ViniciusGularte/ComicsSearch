@@ -2,7 +2,7 @@ import { getCharacters, getCharactersSearch } from "../api/index";
 import CharacterList from "../components/CharacterList/CharacterListPagination";
 import CharacterSearch from "../components/CharacterList/CharacterSearch";
 import CharacterGroupAction from "../components/CharacterList/CharacterGroupActions";
-import { Container } from "../assets/globalStyles/styles";
+import { Container, BodyStyle } from "../assets/globalStyles/styles";
 export async function getServerSideProps({ query }) {
   const offset = query.offset || 0;
   const search = query.search || "";
@@ -21,6 +21,7 @@ export async function getServerSideProps({ query }) {
       props: {
         characters,
         is_search: true,
+        only_favorite: false,
       },
     };
   } else {
@@ -29,6 +30,7 @@ export async function getServerSideProps({ query }) {
       props: {
         characters,
         is_search: false,
+        only_favorite: false,
       },
     };
   }
@@ -37,6 +39,7 @@ export async function getServerSideProps({ query }) {
 const Home = ({ characters, is_search, only_favorite }) => {
   return (
     <Container>
+      <BodyStyle />
       <CharacterSearch />
       <CharacterGroupAction />
       <CharacterList
