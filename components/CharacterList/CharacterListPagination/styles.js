@@ -15,7 +15,7 @@ const CharacterCard = styled.div`
   flex: 1 0 300px;
   margin: 1rem 0.25em;
   height: 100px;
-  background-color: white;
+  background-color: ${(props) => props.theme.surface};
   transition: transform 0.2s;
   height: 400px;
   overflow-y: auto;

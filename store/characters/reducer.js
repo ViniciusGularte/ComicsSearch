@@ -18,10 +18,9 @@ export default function reducer(state = initialState, action) {
         characterImage,
         isFavorite,
       } = payload;
-      const character = state[characterId];
       return {
+        ...state,
         [characterId]: {
-          ...character,
           id: characterId,
           name: characterName,
           gender: characterGender,

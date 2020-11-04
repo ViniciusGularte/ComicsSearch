@@ -51,15 +51,20 @@ const InputCheckboxSlider = styled.span`
     width: 20px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
+    background-color: ${(props) => props.theme.surface};
     -webkit-transition: 0.4s;
     transition: 0.4s;
   }
+`;
+const LoadingText = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
 export {
   Container,
   ContainerCheckbox,
   LabelCheckbox,
+  LoadingText,
   InputCheckbox,
   InputCheckboxSlider,
 };
