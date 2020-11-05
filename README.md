@@ -5,9 +5,13 @@ Projeto desenvolvido para teste a vaga de desenvolvedor da meliuz
 ## instruções para execução
 
 Na pasta da raiz do projeto execute os seguintes comandos:
+
 -- npm i
+
 -- npm run dev
+
 para rodar testes
+
 --  npm run test
 
 ## Tecnologias utilizadas
