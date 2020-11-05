@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
 import {
-  Container,
-  CharacterCard,
-  BannerImage,
-  CharacterCardTextContent,
-  CardTextName,
-  CardTextFooter,
   LoadingItem,
   ContainerSearchView,
   ContainerSearchViewText,
   ContainerSearchViewButton,
 } from "./styles";
-import Link from "next/link";
+import List from "./List/index";
 import { useSelector } from "react-redux";
-
+import { ContainerError } from "../../../assets/globalStyles/styles";
 const CharacterList = ({ Itens, is_search, only_favorite }) => {
   const [characters, setCharacters] = useState({
     results: [],
@@ -22,6 +16,8 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
   const [viewSearchResults, setViewSearchResults] = useState(false);
   const [toogleSearchResults, setToogleSearchResults] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
   const setLoadingTrue = () => setLoading(true);
   const setLoadingFalse = () => setLoading(false);
   const router = useRouter();
@@ -41,8 +37,9 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
           results: array_characters_favorite,
         });
       } else if (Itens.error !== "OK") {
-        // Handle error
+        setError(true);
       } else {
+        setError(false);
         if (is_search) {
           setViewSearchResults(true);
           setToogleSearchResults(true);
@@ -106,7 +103,9 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
   };
   return (
     <>
-      {viewSearchResults && is_search ? (
+      {error ? (
+        <ContainerError>Error</ContainerError>
+      ) : viewSearchResults && is_search ? (
         <ContainerSearchView>
           <ContainerSearchViewText>
             Founded {characters.results.length} characters
@@ -118,40 +117,11 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
           ) : null}
         </ContainerSearchView>
       ) : (
-        <Container className="characters-list">
-          {characters &&
-            characters.results &&
-            characters.results.length > 0 &&
-            characters.results.map((character, i) => {
-              return (
-                <CharacterCard className="characters" key={i}>
-                  <BannerImage
-                    background={
-                      only_favorite
-                        ? character.image
-                        : character.image.medium_url
-                    }
-                  />
-                  <CharacterCardTextContent>
-                    <CardTextName>
-                      {stateCharacters[character.id] &&
-                      stateCharacters[character.id].name
-                        ? stateCharacters[character.id].name
-                        : character.name}{" "}
-                      <hr />
-                    </CardTextName>
-                    <CardTextFooter>
-                      <Link
-                        href={`/character/${encodeURIComponent(character.id)}`}
-                      >
-                        See More
-                      </Link>
-                    </CardTextFooter>
-                  </CharacterCardTextContent>
-                </CharacterCard>
-              );
-            })}
-        </Container>
+        <List
+          characters={characters}
+          only_favorite={only_favorite}
+          stateCharacters={stateCharacters}
+        />
       )}
       {loading && !is_search && !only_favorite && (
         <LoadingItem> Loading ... </LoadingItem>

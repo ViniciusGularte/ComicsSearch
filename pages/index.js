@@ -1,8 +1,10 @@
+import React from "react";
 import { getCharacters, getCharactersSearch } from "../api/index";
 import CharacterList from "../components/CharacterList/CharacterListPagination";
 import CharacterSearch from "../components/CharacterList/CharacterSearch";
 import CharacterGroupAction from "../components/CharacterList/CharacterGroupActions";
 import { Container, BodyStyle } from "../assets/globalStyles/styles";
+import Header from "../widget/header";
 export async function getServerSideProps({ query }) {
   const offset = query.offset || 0;
   const search = query.search || "";
@@ -40,6 +42,7 @@ export async function getServerSideProps({ query }) {
 const Home = ({ characters, is_search, search, only_favorite }) => {
   return (
     <Container>
+      <Header />
       <BodyStyle />
       <CharacterSearch search={search} />
       <CharacterGroupAction only_favorite={only_favorite} />

@@ -18,10 +18,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import { addCharacter } from "../../store/characters/action";
 import customUseEffectUpdate from "../../hooks/customUseEffect";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
-
+import NotificationManager from "../../widget/notifications";
 const CharacterCard = ({ characterInfo }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -84,16 +82,7 @@ const CharacterCard = ({ characterInfo }) => {
       stateCharacters[form.id] &&
       stateCharacters[form.id].is_favorite === true
     ) {
-      toast.warning("😔	 Removed from favorites", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-
+      NotificationManager("warning", "😔	 Removed from favorites");
       dispatch(
         addCharacter(
           form.id,
@@ -107,15 +96,7 @@ const CharacterCard = ({ characterInfo }) => {
         )
       );
     } else {
-      toast.success("😊	 Added to favorites", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      NotificationManager("success", " 😊	 Added to favorites");
 
       dispatch(
         addCharacter(
@@ -148,7 +129,6 @@ const CharacterCard = ({ characterInfo }) => {
           icon={faArrowLeft}
         />
       </ContainerArrowGoBack>
-      <ToastContainer />
 
       <CharacterImg src={characterInfo.results.image.medium_url} />
       <ContainerTextAndButtons>

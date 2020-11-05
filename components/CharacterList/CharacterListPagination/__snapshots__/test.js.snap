@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CharacterListPagination no favorite | no search 1`] = `ShallowWrapper {}`;
+
+exports[`CharacterListPagination no favorite | with search 1`] = `ShallowWrapper {}`;
+
+exports[`CharacterListPagination with favorite | no search 1`] = `ShallowWrapper {}`;

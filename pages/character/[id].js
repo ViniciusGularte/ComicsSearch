@@ -1,6 +1,12 @@
+import React from "react";
 import { getCharacterInfo } from "../../api/index";
-import { Container, BodyStyle } from "../../assets/globalStyles/styles";
+import {
+  Container,
+  BodyStyle,
+  ContainerError,
+} from "../../assets/globalStyles/styles";
 import CharacterCard from "../../components/CharacterDetail";
+import Header from "../../widget/header";
 
 export async function getServerSideProps(context) {
   const characterInfo = await getCharacterInfo(context.query.id);
@@ -12,8 +18,18 @@ export async function getServerSideProps(context) {
 const CharacterInfo = ({ characterInfo }) => {
   return (
     <Container characterDetail>
+      <Header
+        name={characterInfo.results.name}
+        keywords={characterInfo.results.aliases}
+      />
       <BodyStyle />
-      <CharacterCard characterInfo={characterInfo} />
+      {characterInfo.error !== "OK" ? (
+        <ContainerError>
+          <div>Not found</div>{" "}
+        </ContainerError>
+      ) : (
+        <CharacterCard characterInfo={characterInfo} />
+      )}
     </Container>
   );
 };
