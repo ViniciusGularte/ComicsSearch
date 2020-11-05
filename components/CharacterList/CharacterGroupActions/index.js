@@ -9,12 +9,14 @@ import {
 } from "./styles";
 import Router, { useRouter } from "next/router";
 import customUseEffectUpdate from "../../../hooks/customUseEffect";
-const CharacterGroupAction = () => {
+const CharacterGroupAction = ({ only_favorite }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const setLoadingTrue = () => setLoading(true);
   const setLoadingFalse = () => setLoading(false);
-  const [onlyFavorites, setOnlyFavorites] = useState(false);
+  const [onlyFavorites, setOnlyFavorites] = useState(
+    only_favorite ? true : false
+  );
   const toogleFavorites = () => {
     setOnlyFavorites(!onlyFavorites);
   };

@@ -9,6 +9,8 @@ import {
   CardTextFooter,
   LoadingItem,
   ContainerSearchView,
+  ContainerSearchViewText,
+  ContainerSearchViewButton,
 } from "./styles";
 import Link from "next/link";
 import { useSelector } from "react-redux";
@@ -17,13 +19,16 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
   const [characters, setCharacters] = useState({
     results: [],
   });
-
   const [viewSearchResults, setViewSearchResults] = useState(false);
+  const [toogleSearchResults, setToogleSearchResults] = useState(false);
   const [loading, setLoading] = useState(false);
   const setLoadingTrue = () => setLoading(true);
   const setLoadingFalse = () => setLoading(false);
   const router = useRouter();
   const stateCharacters = useSelector((state) => state.characters);
+  const toogleViewSearchResults = () => {
+    setViewSearchResults(false);
+  };
   useEffect(() => {
     if (Itens) {
       if (only_favorite) {
@@ -31,7 +36,7 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
         const array_characters_favorite = array_characters_store.filter(
           (character) => character.is_favorite
         );
-        setViewSearchResults(true);
+        setToogleSearchResults(true);
         setCharacters({
           results: array_characters_favorite,
         });
@@ -40,6 +45,7 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
       } else {
         if (is_search) {
           setViewSearchResults(true);
+          setToogleSearchResults(true);
           setCharacters({
             results: Itens.results,
             offset: Itens.offset,
@@ -48,13 +54,13 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
         } else {
           setCharacters({
             ...characters,
-            results: viewSearchResults
+            results: toogleSearchResults
               ? Itens.results
               : [...characters.results, ...Itens.results],
             offset: Itens.offset,
             number_of_total_results: Itens.number_of_total_results,
           });
-          setViewSearchResults(false);
+          setToogleSearchResults(false);
         }
       }
     }
@@ -100,45 +106,53 @@ const CharacterList = ({ Itens, is_search, only_favorite }) => {
   };
   return (
     <>
-      {viewSearchResults && is_search && (
+      {viewSearchResults && is_search ? (
         <ContainerSearchView>
-          {" "}
-          Encontrados {characters.results.length} personagens{" "}
+          <ContainerSearchViewText>
+            Founded {characters.results.length} characters
+          </ContainerSearchViewText>
+          {characters.results.length > 0 ? (
+            <ContainerSearchViewButton onClick={toogleViewSearchResults}>
+              Click here to view
+            </ContainerSearchViewButton>
+          ) : null}
         </ContainerSearchView>
+      ) : (
+        <Container className="characters-list">
+          {characters &&
+            characters.results &&
+            characters.results.length > 0 &&
+            characters.results.map((character, i) => {
+              return (
+                <CharacterCard className="characters" key={i}>
+                  <BannerImage
+                    background={
+                      only_favorite
+                        ? character.image
+                        : character.image.medium_url
+                    }
+                  />
+                  <CharacterCardTextContent>
+                    <CardTextName>
+                      {stateCharacters[character.id] &&
+                      stateCharacters[character.id].name
+                        ? stateCharacters[character.id].name
+                        : character.name}{" "}
+                      <hr />
+                    </CardTextName>
+                    <CardTextFooter>
+                      <Link
+                        href={`/character/${encodeURIComponent(character.id)}`}
+                      >
+                        See More
+                      </Link>
+                    </CardTextFooter>
+                  </CharacterCardTextContent>
+                </CharacterCard>
+              );
+            })}
+        </Container>
       )}
-
-      <Container className="characters-list">
-        {characters &&
-          characters.results &&
-          characters.results.length > 0 &&
-          characters.results.map((character, i) => {
-            return (
-              <CharacterCard className="characters" key={i}>
-                <BannerImage
-                  background={
-                    only_favorite ? character.image : character.image.medium_url
-                  }
-                />
-                <CharacterCardTextContent>
-                  <CardTextName>
-                    {stateCharacters[character.id] &&
-                    stateCharacters[character.id].name
-                      ? stateCharacters[character.id].name
-                      : character.name}{" "}
-                    <hr />
-                  </CardTextName>
-                  <CardTextFooter>
-                    <Link
-                      href={`/character/${encodeURIComponent(character.id)}`}
-                    >
-                      See More
-                    </Link>
-                  </CardTextFooter>
-                </CharacterCardTextContent>
-              </CharacterCard>
-            );
-          })}
-      </Container>
       {loading && !is_search && !only_favorite && (
         <LoadingItem> Loading ... </LoadingItem>
       )}

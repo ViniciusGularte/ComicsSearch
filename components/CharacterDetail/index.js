@@ -11,17 +11,22 @@ import {
   CharacterInfoInputSelect,
   ButtonEdit,
   ButtonFavorite,
+  ContainerArrowGoBack,
 } from "./styles";
-import { faStar, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faEdit, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
-import { addCharacter } from "../../../store/characters/action";
-import customUseEffectUpdate from "../../../hooks/customUseEffect";
+import { addCharacter } from "../../store/characters/action";
+import customUseEffectUpdate from "../../hooks/customUseEffect";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
 
 const CharacterCard = ({ characterInfo }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const stateCharacters = useSelector((state) => state.characters);
-  console.log(stateCharacters);
   const [edit, setEdit] = useState(false);
   const [form, setForm] = useState({
     id: characterInfo.results.id,
@@ -79,6 +84,16 @@ const CharacterCard = ({ characterInfo }) => {
       stateCharacters[form.id] &&
       stateCharacters[form.id].is_favorite === true
     ) {
+      toast.warning("😔	 Removed from favorites", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
       dispatch(
         addCharacter(
           form.id,
@@ -92,6 +107,16 @@ const CharacterCard = ({ characterInfo }) => {
         )
       );
     } else {
+      toast.success("😊	 Added to favorites", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
       dispatch(
         addCharacter(
           form.id,
@@ -106,11 +131,25 @@ const CharacterCard = ({ characterInfo }) => {
       );
     }
   };
+  const sendHome = (e) => {
+    router.push("/");
+  };
+
   const changeInput = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
   return (
     <Container>
+      <ContainerArrowGoBack>
+        <FontAwesomeIcon
+          onClick={sendHome}
+          color={"blue"}
+          size={"1x"}
+          icon={faArrowLeft}
+        />
+      </ContainerArrowGoBack>
+      <ToastContainer />
+
       <CharacterImg src={characterInfo.results.image.medium_url} />
       <ContainerTextAndButtons>
         {edit ? (
@@ -131,6 +170,7 @@ const CharacterCard = ({ characterInfo }) => {
               onChange={changeInput}
               placeholder="Birth"
               name="birth"
+              type="date"
               value={form.birth}
             />
             <CharacterInfoInputSelect
@@ -155,7 +195,7 @@ const CharacterCard = ({ characterInfo }) => {
             <CharacterInfoText>Name: {form.name}</CharacterInfoText>
             <CharacterInfoText>Real Name: {form.real_name}</CharacterInfoText>
             <CharacterInfoText>
-              Age: {form.birth ? form.birth : "--"}
+              Birth: {form.birth ? form.birth : "--"}
             </CharacterInfoText>
             <CharacterInfoText>
               Gender: {form.gender === 1 ? "Man" : "Woman"}

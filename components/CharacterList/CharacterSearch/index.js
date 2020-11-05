@@ -5,9 +5,9 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
 import customUseEffectUpdate from "../../../hooks/customUseEffect";
 
-const SearchBar = () => {
+const SearchBar = ({ search }) => {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(search ? search : "");
   const setQuery = (item) => {
     setSearchQuery(item.target.value);
   };

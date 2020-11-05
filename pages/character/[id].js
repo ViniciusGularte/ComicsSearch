@@ -1,6 +1,6 @@
 import { getCharacterInfo } from "../../api/index";
 import { Container, BodyStyle } from "../../assets/globalStyles/styles";
-import CharacterCard from "../../components/CharacterDetail/CharacterCard";
+import CharacterCard from "../../components/CharacterDetail";
 
 export async function getServerSideProps(context) {
   const characterInfo = await getCharacterInfo(context.query.id);

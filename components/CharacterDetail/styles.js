@@ -124,7 +124,19 @@ const ButtonFavorite = styled(Button)`
   background-color: ${(props) =>
     props.is_favorite ? props.theme.warning : null};
 `;
-
+const ContainerArrowGoBack = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+  svg {
+    cursor: pointer;
+    transition: transform 0.2s;
+    &:hover {
+      transform: scale(1.4);
+    }
+  }
+`;
 export {
   Container,
   CharacterInfoText,
@@ -138,4 +150,5 @@ export {
   ContainerButton,
   ButtonEdit,
   ButtonFavorite,
+  ContainerArrowGoBack,
 };

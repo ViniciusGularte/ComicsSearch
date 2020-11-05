@@ -20,6 +20,7 @@ export async function getServerSideProps({ query }) {
     return {
       props: {
         characters,
+        search: search,
         is_search: true,
         only_favorite: false,
       },
@@ -36,12 +37,12 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-const Home = ({ characters, is_search, only_favorite }) => {
+const Home = ({ characters, is_search, search, only_favorite }) => {
   return (
     <Container>
       <BodyStyle />
-      <CharacterSearch />
-      <CharacterGroupAction />
+      <CharacterSearch search={search} />
+      <CharacterGroupAction only_favorite={only_favorite} />
       <CharacterList
         only_favorite={only_favorite}
         is_search={is_search}
