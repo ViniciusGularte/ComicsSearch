@@ -1,6 +1,5 @@
 # Comic Search
 
-Projeto desenvolvido para teste a vaga de desenvolvedor da meliuz
 
 ## instruções para execução
 
